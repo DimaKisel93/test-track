@@ -1,0 +1,36 @@
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.chart {
+  display: block;
+  margin: 0 auto;
+}
+
+.bar {
+  fill: #4caf50;
+}
+
+.bar.db {
+  fill: #2196F3;
+}
+
+.bar.back {
+  fill: #FFC107;
+}
+
+.bar.front {
+  fill: #4CAF50;
+}
+
+.bar.norm {
+  fill: #f44336;
+}
+
+.bar-group text {
+  fill: #000;
+  text-anchor: middle;
+}
