@@ -1,8 +1,14 @@
 import { Instances, TestData } from "../../types/types";
 import {
   calculateHeightsForInstances,
-  svgHeight,
+  getTotalHeight,
 } from "../../utils/calculateChartHeights";
+import {
+  barGap,
+  barWidth,
+  cornerRadius,
+  svgHeight,
+} from "../../constants/chatConstants";
 
 import styles from "./chart.module.scss";
 
@@ -16,51 +22,68 @@ export const Chart = ({ chartData }: ChartData) => {
   }
 
   const heightsForInstances = calculateHeightsForInstances(chartData);
+  const instances = Object.keys(heightsForInstances);
 
   return (
     <div className={styles.container}>
       <h1>{chartData.title}</h1>
-      <div className={styles.chart}>
-        {(["dev", "test", "prod"] as Instances[]).map((instance) => (
-          <svg
-            key={instance}
-            className={styles.bar}
-            height={svgHeight}
-            width="100"
-          >
-            <rect
-              x="0"
-              y={svgHeight - heightsForInstances[instance].db}
-              width="100"
-              height={heightsForInstances[instance].db}
-              fill="#2196F3"
-            />
-            <rect
-              x="0"
-              y={
-                svgHeight -
-                heightsForInstances[instance].db -
-                heightsForInstances[instance].back
-              }
-              width="100"
-              height={heightsForInstances[instance].back}
-              fill="#4CAF50"
-            />
-            <rect
-              x="0"
-              y={
-                svgHeight -
-                heightsForInstances[instance].db -
-                heightsForInstances[instance].back -
-                heightsForInstances[instance].front
-              }
-              width="100"
-              height={heightsForInstances[instance].front}
-              fill="#FFC107"
-            />
-          </svg>
-        ))}
-      </div>
+      <svg
+        className={styles.chart}
+        height={svgHeight}
+        width={(barWidth + barGap) * instances.length - barGap}
+      >
+        {(["dev", "test", "prod"] as Instances[]).map((instance, index) => {
+          const totalHeight = getTotalHeight(heightsForInstances, instance);
+
+          return (
+            <g
+              key={instance}
+              className={styles.bar}
+              transform={`translate(${index * (barWidth + barGap)}, 0)`}
+            >
+              <rect
+                x="0"
+                y={svgHeight - totalHeight}
+                width={barWidth}
+                height={totalHeight}
+                rx={cornerRadius}
+                ry={cornerRadius}
+                className={styles.barBackground}
+              />
+              <rect
+                x="0"
+                y={svgHeight - heightsForInstances[instance].db}
+                width={barWidth}
+                height={heightsForInstances[instance].db}
+                className={styles.dbData}
+              />
+              <rect
+                x="0"
+                y={
+                  svgHeight -
+                  heightsForInstances[instance].db -
+                  heightsForInstances[instance].back
+                }
+                className={styles.backData}
+                height={heightsForInstances[instance].back}
+                width={barWidth}
+              />
+              <rect
+                x="0"
+                y={
+                  svgHeight -
+                  heightsForInstances[instance].db -
+                  heightsForInstances[instance].back -
+                  heightsForInstances[instance].front
+                }
+                className={styles.frontData}
+                height={heightsForInstances[instance].front}
+                width={barWidth}
+              />
+            </g>
+          );
+        })}
+      </svg>
     </div>
   );
 };

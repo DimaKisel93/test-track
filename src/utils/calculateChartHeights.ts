@@ -1,6 +1,4 @@
-import { Instances, TestData } from "../types/types";
-
-export const svgHeight = 431;
+import { InstanceData, Instances, TestData } from "../types/types";
 
 const calculateScaledHeight = (
   value: number,
@@ -24,7 +22,7 @@ const layoutHeights: Record<Instances, number> = {
 
 export const calculateHeightsForInstances = (
   chartData: TestData,
-): Record<Instances, { db: number; back: number; front: number }> => {
+): Record<Instances, InstanceData> => {
   const total = getTotalValues(chartData);
   return {
     dev: {
@@ -75,4 +73,15 @@ export const calculateHeightsForInstances = (
       ),
     },
   };
+};
+
+export const getTotalHeight = (
+  heightsForInstances: Record<Instances, InstanceData>,
+  instance: Instances,
+) => {
+  return (
+    heightsForInstances[instance].db +
+    heightsForInstances[instance].back +
+    heightsForInstances[instance].front
+  );
 };

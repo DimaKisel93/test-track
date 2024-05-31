@@ -5,25 +5,27 @@
   padding: 20px;
 }
 
-.chart {
-  display: block;
-  margin: 0 auto;
-}
-
 .bar {
   fill: #4caf50;
+  margin-right: 60px;
 }
 
-.bar.db {
-  fill: #2196F3;
+.backData {
+  fill: rgba(170, 111, 172, 1);
 }
 
-.bar.back {
-  fill: #FFC107;
+.dbData {
+  fill: rgba(232, 84, 152, 1);
+  clip-path: inset(0px 0px 0px 0px round 0px 0px 10px 10px); 
 }
 
-.bar.front {
-  fill: #4CAF50;
+.frontData {
+  fill: rgba(74, 182, 232, 1);
+  clip-path: inset(0px 0px 0px 0px round 10px 10px 0px 0px); 
+}
+
+.barBackground {
+  fill: none;
 }
 
 .bar.norm {
