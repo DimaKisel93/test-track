@@ -4,4 +4,4 @@ export const barGap = 60;
 export const cornerRadius = 10;
 
 export const arrowGap = 10;
-export const arrowHeight = 62;
+export const fixedY = 62;

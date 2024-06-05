@@ -5,10 +5,10 @@ import {
 } from "../../utils/calculateChartHeights";
 import {
   arrowGap,
-  arrowHeight,
   barGap,
   barWidth,
   cornerRadius,
+  fixedY,
   svgHeight,
 } from "../../constants/chatConstants";
 
@@ -45,7 +45,7 @@ export const Chart = ({ chartData }: ChartData) => {
     endX: number,
     endY: number,
   ) => {
-    return `M${startX},${startY - arrowGap} V${startY - arrowHeight} H${endX} V${endY - arrowGap}`;
+    return `M${startX},${startY - arrowGap} V${fixedY} H${endX} V${endY - arrowGap}`;
   };
 
   const arrowHead = (x: number, y: number) => (
@@ -65,7 +65,6 @@ export const Chart = ({ chartData }: ChartData) => {
       >
         {(["dev", "test", "prod"] as Instances[]).map((instance, index) => {
           const totalHeight = getTotalHeight(heightsForInstances, instance);
-          console.log(totalHeight);
           return (
             <g
               key={instance}
@@ -129,7 +128,7 @@ export const Chart = ({ chartData }: ChartData) => {
         <path
           d={arrowPath(
             barWidth + barGap + (barWidth * 2) / 3,
-            svgHeight - devSum,
+            svgHeight - testSum,
             2 * (barWidth + barGap) + barWidth / 2,
             svgHeight - prodSum,
           )}
@@ -137,7 +136,10 @@ export const Chart = ({ chartData }: ChartData) => {
           fill="transparent"
           strokeWidth="2"
         />
-        {arrowHead(2 * (barWidth + barGap) + barWidth / 2, svgHeight - prodSum)}
+        {arrowHead(
+          2 * (barWidth + barGap) + barWidth / 2,
+          svgHeight - prodSum - 5,
+        )}
       </svg>
     </div>
   );
