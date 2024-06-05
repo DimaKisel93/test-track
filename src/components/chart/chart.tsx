@@ -8,8 +8,11 @@ import {
   barGap,
   barWidth,
   cornerRadius,
+  DEV,
   fixedY,
+  PROD,
   svgHeight,
+  TEST,
 } from "../../constants/chatConstants";
 
 import styles from "./chart.module.scss";
@@ -26,18 +29,9 @@ export const Chart = ({ chartData }: ChartData) => {
   const heightsForInstances = calculateHeightsForInstances(chartData);
   const instances = Object.keys(heightsForInstances);
 
-  const devSum =
-    heightsForInstances.dev.front +
-    heightsForInstances.dev.back +
-    heightsForInstances.dev.db;
-  const testSum =
-    heightsForInstances.test.front +
-    heightsForInstances.test.back +
-    heightsForInstances.test.db;
-  const prodSum =
-    heightsForInstances.prod.front +
-    heightsForInstances.prod.back +
-    heightsForInstances.prod.db;
+  const devBarHeight = getTotalHeight(heightsForInstances, DEV);
+  const testBarHeight = getTotalHeight(heightsForInstances, TEST);
+  const prodBarHeight = getTotalHeight(heightsForInstances, PROD);
 
   const arrowPath = (
     startX: number,
@@ -116,21 +110,24 @@ export const Chart = ({ chartData }: ChartData) => {
         <path
           d={arrowPath(
             barWidth / 2,
-            svgHeight - devSum,
+            svgHeight - devBarHeight,
             barWidth + barGap + barWidth / 3,
-            svgHeight - testSum,
+            svgHeight - testBarHeight,
           )}
           stroke="black"
           fill="transparent"
           strokeWidth="2"
         />
-        {arrowHead(barWidth + barGap + barWidth / 3, svgHeight - testSum - 5)}
+        {arrowHead(
+          barWidth + barGap + barWidth / 3,
+          svgHeight - testBarHeight - 5,
+        )}
         <path
           d={arrowPath(
             barWidth + barGap + (barWidth * 2) / 3,
-            svgHeight - testSum,
+            svgHeight - testBarHeight,
             2 * (barWidth + barGap) + barWidth / 2,
-            svgHeight - prodSum,
+            svgHeight - prodBarHeight,
           )}
           stroke="black"
           fill="transparent"
@@ -138,7 +135,7 @@ export const Chart = ({ chartData }: ChartData) => {
         />
         {arrowHead(
           2 * (barWidth + barGap) + barWidth / 2,
-          svgHeight - prodSum - 5,
+          svgHeight - prodBarHeight - 5,
         )}
       </svg>
     </div>
