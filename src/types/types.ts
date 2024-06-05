@@ -1,27 +1,15 @@
 export interface TestData {
   title: string;
-  dev: {
-    front: number;
-    back: number;
-    db: number;
-  };
-  test: {
-    front: number;
-    back: number;
-    db: number;
-  };
-  prod: {
-    front: number;
-    back: number;
-    db: number;
-  };
+  dev: SiteAnalysisData;
+  test: SiteAnalysisData;
+  prod: SiteAnalysisData;
   norm: number;
 }
 
-export interface InstanceData {
+export interface SiteAnalysisData {
   front: number;
   back: number;
   db: number;
 }
 
-export type Instances = "dev" | "test" | "prod";
+export type Instances = 'dev' | 'test' | 'prod';

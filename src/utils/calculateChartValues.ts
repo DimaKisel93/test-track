@@ -1,4 +1,4 @@
-import { InstanceData, Instances, TestData } from "../types/types";
+import { SiteAnalysisData, Instances, TestData } from '../types/types';
 
 const calculateScaledHeight = (
   value: number,
@@ -8,7 +8,9 @@ const calculateScaledHeight = (
   return Math.round((value / totalValue) * layoutHeight);
 };
 
-const getTotalValues = (chartData: TestData): Record<Instances, number> => ({
+export const getTotalSiteAnalysisValues = (
+  chartData: TestData,
+): Record<Instances, number> => ({
   dev: chartData.dev.front + chartData.dev.back + chartData.dev.db,
   test: chartData.test.front + chartData.test.back + chartData.test.db,
   prod: chartData.prod.front + chartData.prod.back + chartData.prod.db,
@@ -20,63 +22,73 @@ const layoutHeights: Record<Instances, number> = {
   prod: 245,
 };
 
-export const calculateHeightsForInstances = (
+export const calculateHeightsForSiteData = (
   chartData: TestData,
-): Record<Instances, InstanceData> => {
-  const total = getTotalValues(chartData);
+): Record<Instances, SiteAnalysisData> => {
+  const total = getTotalSiteAnalysisValues(chartData);
+  const {
+    dev: totalDevInstance,
+    test: totalTestInstance,
+    prod: totalProdInstance,
+  } = total;
+
   return {
     dev: {
-      db: calculateScaledHeight(chartData.dev.db, total.dev, layoutHeights.dev),
+      db: calculateScaledHeight(
+        chartData.dev.db,
+        totalDevInstance,
+        layoutHeights.dev,
+      ),
       back: calculateScaledHeight(
         chartData.dev.back,
-        total.dev,
+        totalDevInstance,
         layoutHeights.dev,
       ),
       front: calculateScaledHeight(
         chartData.dev.front,
-        total.dev,
+        totalDevInstance,
         layoutHeights.dev,
       ),
     },
     test: {
       db: calculateScaledHeight(
         chartData.test.db,
-        total.test,
+        totalTestInstance,
         layoutHeights.test,
       ),
       back: calculateScaledHeight(
         chartData.test.back,
-        total.test,
+        totalTestInstance,
         layoutHeights.test,
       ),
       front: calculateScaledHeight(
         chartData.test.front,
-        total.test,
+        totalTestInstance,
         layoutHeights.test,
       ),
     },
     prod: {
       db: calculateScaledHeight(
         chartData.prod.db,
-        total.prod,
+        totalProdInstance,
         layoutHeights.prod,
       ),
       back: calculateScaledHeight(
         chartData.prod.back,
-        total.prod,
+        totalProdInstance,
         layoutHeights.prod,
       ),
       front: calculateScaledHeight(
         chartData.prod.front,
-        total.prod,
+        totalProdInstance,
         layoutHeights.prod,
       ),
     },
   };
 };
 
-export const getTotalHeight = (
-  heightsForInstances: Record<Instances, InstanceData>,
+export const getTotalBarHeight = (
+  heightsForInstances: Record<Instances, SiteAnalysisData>,
   instance: Instances,
 ) => {
   return (
@@ -84,4 +96,10 @@ export const getTotalHeight = (
     heightsForInstances[instance].back +
     heightsForInstances[instance].front
   );
+};
+
+export const calculateStatisticDifference = (sum1: number, sum2: number) => {
+  const diff = sum2 - sum1;
+  const sign = diff > 0 ? '+' : '-';
+  return `${sign}${Math.abs(diff)}`;
 };
